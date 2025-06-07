@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     // Елементи модального вікна для ВІДЕО
     const videoModal = document.getElementById('videoModal');
@@ -184,12 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-
-window.addEventListener('click', (event) => {
-    if (event.target === videoModal) {
-        closeVideoModal();
-    }
-});
     // =========================================================================
     // Функції для ІСТОРІЙ-модалки (без змін)
     // =========================================================================
