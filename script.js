@@ -185,18 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// Обробники подій для ВІДЕО-модалки (без змін)
-viewFilmButtons.forEach(button => {
-    button.addEventListener('click', (event) => {
-        const filename = event.target.dataset.videoFilename;
-        if (filename) {
-            openVideoModal(filename);
-        }
-    });
-});
-
-closeVideoButton.addEventListener('click', closeVideoModal);
-
 window.addEventListener('click', (event) => {
     if (event.target === videoModal) {
         closeVideoModal();
