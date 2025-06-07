@@ -135,50 +135,55 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
-// =========================================================================
-// Функції для ВІДЕО-модалки
-// =========================================================================
+    // =========================================================================
+    // Функції для ВІДЕО-модалки (без змін)
+    // =========================================================================
+    function openVideoModal(filename) {
+        filmVideoPlayer.innerHTML = '';
+        const mp4Source = document.createElement('source');
+        mp4Source.src = `assets/films/${filename}.mp4`;
+        mp4Source.type = 'video/mp4';
+        filmVideoPlayer.appendChild(mp4Source);
 
-// Об'єкт, що містить ID відео з Google Диска за їхніми "іменами"
-const googleDriveVideoIds = {
-    "film2": "1qAUK58vu8ufw8rCcrmJ1hEi4I8hZ6HvX", // Замініть на реальний ID вашого відео
-    "film3": "1EvgnPbLrrBodb23_bf9TUGxKsVqrVnIv", // Якщо у вас є інші відео
-    // Додайте більше відео за потребою
-};
+        const webmSource = document.createElement('source');
+        webmSource.src = `assets/films/${filename}.webm`;
+        webmSource.type = 'video/webm';
+        filmVideoPlayer.appendChild(webmSource);
 
-function openVideoModal(filename) {
-    filmVideoPlayer.innerHTML = ''; // Очищаємо плеєр
-    const videoId = googleDriveVideoIds[filename];
+        filmVideoPlayer.load();
+        filmVideoPlayer.play();
 
-    if (videoId) {
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://drive.google.com/file/d/${videoId}/preview`; // Посилання для вбудовування з Google Диска
-        iframe.width = "100%"; // Задайте ширину
-        iframe.height = "100%"; // Задайте висоту
-        iframe.allow = "autoplay"; // Дозволити автозапуск
-        iframe.frameBorder = "0"; // Прибрати рамку
-        iframe.allowFullscreen = true; // Дозволити повноекранний режим
-
-        filmVideoPlayer.appendChild(iframe); // Додаємо iframe до контейнера
-
-        // Тут ми не використовуємо filmVideoPlayer.load() або .play(), оскільки це iframe
-        // Відео буде відтворюватися всередині iframe
-    } else {
-        // Якщо ID відео не знайдено, можна показати повідомлення про помилку
-        console.error(`Відео з назвою '${filename}' не знайдено в googleDriveVideoIds.`);
-        filmVideoPlayer.innerHTML = '<p>Відео не знайдено або не може бути відтворено.</p>';
+        videoModal.style.display = 'flex';
+        body.classList.add('modal-open');
     }
 
-    videoModal.style.display = 'flex';
-    body.classList.add('modal-open');
-}
+    function closeVideoModal() {
+        filmVideoPlayer.pause();
+        filmVideoPlayer.currentTime = 0;
+        filmVideoPlayer.innerHTML = '';
+        videoModal.style.display = 'none';
+        body.classList.remove('modal-open');
+    }
 
-function closeVideoModal() {
-    // При закритті модалки, просто очищаємо вміст, щоб зупинити iframe
-    filmVideoPlayer.innerHTML = '';
-    videoModal.style.display = 'none';
-    body.classList.remove('modal-open');
-}
+    // Обробники подій для ВІДЕО-модалки
+    viewFilmButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const filename = event.target.dataset.videoFilename;
+            if (filename) {
+                openVideoModal(filename);
+            }
+        });
+    });
+
+    closeVideoButton.addEventListener('click', closeVideoModal);
+
+    window.addEventListener('click', (event) => {
+        if (event.target === videoModal) {
+            closeVideoModal();
+        }
+    });
+
+
 
 // Обробники подій для ВІДЕО-модалки (без змін)
 viewFilmButtons.forEach(button => {
